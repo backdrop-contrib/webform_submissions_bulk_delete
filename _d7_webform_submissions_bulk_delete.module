@@ -35,22 +35,22 @@ function _d7_webform_submissions_bulk_delete() {
  */
 function _d7_webform_submissions_bulk_delete($form, $form_state) {
   if (!isset($form_state['delete_submit']['submit'])) {
+    $date_attributes = array('placeholder' => format_date(REQUEST_TIME, 'custom', webform_date_format('short')));
     $form['delete_start_date'] = array(
-      '#date_format' => 'Y-m-d',
       '#title'       => t('Start Date'),
-      '#type' => 'date_popup',
-      '#date_year_range' => '-10:+10',
+      '#type' => 'textfield',
+      '#attributes' => $date_attributes,
     );
     $form['delete_end_date'] = array(
-      '#date_format' => 'Y-m-d',
       '#title'       => t('End date'),
-      '#type' => 'date_popup',
-      '#date_year_range' => '-10:+10',
+      '#type' => 'textfield',
+      '#attributes' => $date_attributes,
+    
     );
     $form['delete_submit'] = array(
       '#type' => 'submit',
       '#value' => t('Delete'),
-      '#submit' => array('webform_data_export_form_submit'),
+      '#submit' => array('_d7_webform_submissions_bulk_delete_submit'),
     );
     return $form;
   }
@@ -63,7 +63,7 @@ function _d7_webform_submissions_bulk_delete($form, $form_state) {
 /**
  * Implementation of batch creation().
  */
-function _d7_webform_submissions_bulk_delete($form, &$form_state) {
+function _d7_webform_submissions_bulk_delete_submit($form, &$form_state) {
   if (!isset($form_state['delete_submit']['submit'])) {
     $form_state['delete_submit']['submit'] = TRUE;
     $form_state['rebuild'] = TRUE;
