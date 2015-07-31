@@ -1,9 +1,0 @@
-name = Webform Submissions Bulk Delete
-description = Delete webform submissions by date range 
-package = Webform
-core = 7.x
-php = 5.3
-configure = node/%nid/webform-results/bulk-delete
-dependencies[] = webform
-; Files that contain css:
-stylesheets[all][] = css/_d7_webform_submissions_bulk_delete.css
