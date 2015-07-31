@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Export and delete webform submissions with in the date range.
+ * Delete webform submissions with in the date range.
  */
 
 /**
