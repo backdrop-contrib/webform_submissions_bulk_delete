@@ -23,9 +23,9 @@ function _d7_webform_submissions_bulk_delete_menu() {
   $items['node/%webform_menu/webform-results/bulk-delete'] = array(
     'title' => 'Bulk Delete',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('webform_data_export_form'),
+    'page arguments' => array('_d7_webform_submissions_bulk_delete_form'),
     'access arguments' => array('access administration menu'),
-    'weight' => 5,
+    'weight' => 9,
     'type' => MENU_LOCAL_TASK,
   );
   return $items;
@@ -42,16 +42,18 @@ function _d7_webform_submissions_bulk_delete_form($form, $form_state) {
       '#title'       => t('Start Date'),
       '#type' => 'textfield',
       '#attributes' => $date_attributes,
+      '#size'       => 20,
     );
     $form['delete_end_date'] = array(
       '#title'       => t('End date'),
       '#type' => 'textfield',
       '#attributes' => $date_attributes,
+      '#size'       => 20,
     );
     $form['delete_submit'] = array(
       '#type' => 'submit',
       '#value' => t('Delete'),
-      '#submit' => array('_d7_webform_submissions_bulk_delete_submit'),
+      '#submit' => array('_d7_webform_submissions_bulk_delete_form_submit'),
     );
     return $form;
   }
@@ -71,7 +73,7 @@ function _d7_webform_submissions_bulk_delete_form_submit($form, &$form_state) {
     $form_state['delete_submit']['original_form'] = $form_state['values'];
   }
   else {
-    $batch = webform_data_export_delete_webform_submission_batch($form, $form_state);
+    $batch =  _d7_webform_submissions_bulk_delete_webform_submission_batch($form, $form_state);
     batch_set($batch);
     $nid = check_plain(arg(1));
     batch_process('node/' . $nid . '/webform-results/bulk-delete');
@@ -93,7 +95,7 @@ function _d7_webform_submissions_bulk_delete_webform_submission_batch($form, &$f
   $sid = $query->execute()->fetchAll();
   foreach ($sid as $submission_id) {
     $operations[] = array(
-      'webform_data_export_delete_webform_submission_process', array($submission_id->sid),
+      '_d7_webform_submissions_bulk_delete_webform_submission_process', array($submission_id->sid),
     );
   }
   $batch = array(
@@ -102,7 +104,7 @@ function _d7_webform_submissions_bulk_delete_webform_submission_batch($form, &$f
     'operations' => $operations,
     'progress_message' => t('@current Submission Deleted out of @total.'),
     'error_message' => t('An Error has occurred!'),
-    'finished' => 'webform_data_export_delete_webform_submission_finished',
+    'finished' => '_d7_webform_submissions_bulk_delete_webform_submission_finished',
   );
   return $batch;
 }
@@ -110,7 +112,7 @@ function _d7_webform_submissions_bulk_delete_webform_submission_batch($form, &$f
  * Implementation of batch context().
  */
 function _d7_webform_submissions_bulk_delete_webform_submission_process($submission_id, &$context) {
-  webform_data_export_delete_webform_submission_action($submission_id, $context, 'content-id');
+  _d7_webform_submissions_bulk_delete_webform_submission_action($submission_id, $context, 'content-id');
 }
 /**
  * Implementation of batch success().
