@@ -35,7 +35,8 @@ function _d7_webform_submissions_bulk_delete() {
  */
 function _d7_webform_submissions_bulk_delete($form, $form_state) {
   if (!isset($form_state['delete_submit']['submit'])) {
-    $date_attributes = array('placeholder' => format_date(REQUEST_TIME, 'custom', webform_date_format('short')));
+    $date_attributes = array('placeholder' => 
+    format_date(REQUEST_TIME, 'custom', webform_date_format('short')));
     $form['delete_start_date'] = array(
       '#title'       => t('Start Date'),
       '#type' => 'textfield',
@@ -45,7 +46,6 @@ function _d7_webform_submissions_bulk_delete($form, $form_state) {
       '#title'       => t('End date'),
       '#type' => 'textfield',
       '#attributes' => $date_attributes,
-    
     );
     $form['delete_submit'] = array(
       '#type' => 'submit',
