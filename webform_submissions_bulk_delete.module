@@ -23,7 +23,7 @@ function webform_submissions_bulk_delete_menu() {
   $items['node/%webform_menu/webform-results/bulk-delete'] = array(
     'title' => 'Bulk Delete',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('webform_submissions_bulk_delete_form'),
+    'page arguments' => array('webform_submissions_bulk_delete_form',1),
     'access arguments' => array('access administration menu'),
     'weight' => 9,
     'type' => MENU_LOCAL_TASK,
@@ -33,7 +33,7 @@ function webform_submissions_bulk_delete_menu() {
 /**
  * Implements hook_form().
  */
-function webform_submissions_bulk_delete_form($form, $form_state) {
+function webform_submissions_bulk_delete_form($form, $form_state, $node) {
   if (!isset($form_state['delete_submit']['submit'])) {
     $date_attributes = array(
       'placeholder' => format_date(REQUEST_TIME, 'custom', webform_date_format('short')),
@@ -53,15 +53,32 @@ function webform_submissions_bulk_delete_form($form, $form_state) {
     $form['delete_submit'] = array(
       '#type' => 'submit',
       '#value' => t('Delete'),
+      '#validate' => array('webform_submissions_bulk_delete_form_validate'),
       '#submit' => array('webform_submissions_bulk_delete_form_submit'),
     );
     return $form;
   }
   else {
     $path = current_path();
+    $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
     return confirm_form($form, t("Do you really want to make the submissions to delete?"), $path, t("Warning, this is the last step before form gets submitted"), t("Proceed?"));
   }
   return $form;
+}
+/**
+* Implements of form validation().
+*/
+function webform_submissions_bulk_delete_form_validate($form, &$form_state){
+  if(!isset($form['confirm'])){
+    $start_date = check_plain($form_state['values']['delete_start_date']);
+    $end_date = check_plain($form_state['values']['delete_end_date']);
+    if($start_date == ''){
+      form_set_error('Start Date validation','Please enter Start Date');
+    }
+    if($end_date == ''){
+      form_set_error('End Date validation','Please enter End Date');
+   }
+  }
 }
 /**
  * Implementation of batch creation().
@@ -75,7 +92,7 @@ function webform_submissions_bulk_delete_form_submit($form, &$form_state) {
   else {
     $batch = webform_submissions_bulk_delete_webform_submission_batch($form, $form_state);
     batch_set($batch);
-    $nid = check_plain(arg(1));
+    $nid = $form['nid']['#value'];
     batch_process('node/' . $nid . '/webform-results/bulk-delete');
   }
 }
@@ -84,9 +101,15 @@ function webform_submissions_bulk_delete_form_submit($form, &$form_state) {
  */
 function webform_submissions_bulk_delete_webform_submission_batch($form, &$form_state) {
   $operations = array();
-  $nid = check_plain(arg(1));
+  $nid = $form['nid']['#value'];
   $start_date = strtotime(check_plain($form_state['delete_submit']['original_form']['delete_start_date']));
-  $end_date = strtotime(check_plain($form_state['delete_submit']['original_form']['delete_end_date'])) + 23 * 3600;
+  $end_date = check_plain($form_state['delete_submit']['original_form']['delete_end_date']);
+  if ($end_date != '' && ($end_date = strtotime($end_date)) !== FALSE) {
+    if ($end_date == strtotime('midnight', $end_date)) {
+          // Full day specified
+        $end_date += 86399; // 86400 is a full day of seconds.
+    }
+  }
   $query = db_select('webform_submissions', 'submission');
   $query->fields('submission', array('sid'));
   $query->condition('submission.nid', $nid);
