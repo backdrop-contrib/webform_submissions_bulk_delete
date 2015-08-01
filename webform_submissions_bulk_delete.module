@@ -66,8 +66,8 @@ function webform_submissions_bulk_delete_form($form, $form_state, $node) {
   return $form;
 }
 /**
-* Implements of form validation().
-*/
+ * Implements of form validation().
+ */
 function webform_submissions_bulk_delete_form_validate($form, &$form_state) {
   if (!isset($form['confirm'])) {
     $start_date = check_plain($form_state['values']['delete_start_date']);
@@ -106,7 +106,7 @@ function webform_submissions_bulk_delete_webform_submission_batch($form, &$form_
   $end_date = check_plain($form_state['delete_submit']['original_form']['delete_end_date']);
   if ($end_date != '' && ($end_date = strtotime($end_date)) !== FALSE) {
     if ($end_date == strtotime('midnight', $end_date)) {
-      // Full day specified
+      // Full day specified.
       $end_date += 86399;
     }
   }
