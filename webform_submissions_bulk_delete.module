@@ -23,7 +23,7 @@ function webform_submissions_bulk_delete_menu() {
   $items['node/%webform_menu/webform-results/bulk-delete'] = array(
     'title' => 'Bulk Delete',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('webform_submissions_bulk_delete_form',1),
+    'page arguments' => array('webform_submissions_bulk_delete_form', 1),
     'access arguments' => array('access administration menu'),
     'weight' => 9,
     'type' => MENU_LOCAL_TASK,
@@ -68,16 +68,16 @@ function webform_submissions_bulk_delete_form($form, $form_state, $node) {
 /**
 * Implements of form validation().
 */
-function webform_submissions_bulk_delete_form_validate($form, &$form_state){
-  if(!isset($form['confirm'])){
+function webform_submissions_bulk_delete_form_validate($form, &$form_state) {
+  if (!isset($form['confirm'])) {
     $start_date = check_plain($form_state['values']['delete_start_date']);
     $end_date = check_plain($form_state['values']['delete_end_date']);
-    if($start_date == ''){
-      form_set_error('Start Date validation','Please enter Start Date');
+    if ($start_date == '') {
+      form_set_error('Start Date validation',t('Please enter Start Date'));
     }
-    if($end_date == ''){
-      form_set_error('End Date validation','Please enter End Date');
-   }
+    if ($end_date == '') {
+      form_set_error('End Date validation',t('Please enter End Date'));
+    }
   }
 }
 /**
