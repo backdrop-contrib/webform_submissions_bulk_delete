@@ -73,10 +73,10 @@ function webform_submissions_bulk_delete_form_validate($form, &$form_state) {
     $start_date = check_plain($form_state['values']['delete_start_date']);
     $end_date = check_plain($form_state['values']['delete_end_date']);
     if ($start_date == '') {
-      form_set_error('Start Date validation',t('Please enter Start Date'));
+      form_set_error('Start Date validation', t('Please enter Start Date'));
     }
     if ($end_date == '') {
-      form_set_error('End Date validation',t('Please enter End Date'));
+      form_set_error('End Date validation', t('Please enter End Date'));
     }
   }
 }
@@ -106,8 +106,8 @@ function webform_submissions_bulk_delete_webform_submission_batch($form, &$form_
   $end_date = check_plain($form_state['delete_submit']['original_form']['delete_end_date']);
   if ($end_date != '' && ($end_date = strtotime($end_date)) !== FALSE) {
     if ($end_date == strtotime('midnight', $end_date)) {
-          // Full day specified
-        $end_date += 86399; // 86400 is a full day of seconds.
+      // Full day specified
+      $end_date += 86399;
     }
   }
   $query = db_select('webform_submissions', 'submission');
