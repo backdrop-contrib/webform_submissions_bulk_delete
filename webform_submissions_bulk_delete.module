@@ -79,7 +79,7 @@ function webform_submissions_bulk_delete_form_validate($form, &$form_state) {
       form_set_error('End Date validation', t('Please enter End Date'));
     }
     if (strtotime($start_date) > strtotime($end_date)) {
-     form_set_error('Date range validation',t('Start date should not greater than End date')); 
+      form_set_error('Date range validation', t('Start date should not greater than End date'));
     }
   }
 }
