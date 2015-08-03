@@ -11,10 +11,12 @@ Requirements
 ------------
 Drupal 7.x
 Webform 7.x
+Date pop up
+Date api
 
 Installation
 ------------
-1. Copy the entire _d7_webform_submissions_bulk_delete directory
+1. Copy the entire webform_submissions_bulk_delete directory
    the Drupal sites/all/modules directory.
 
 2. Login as an administrator. 
