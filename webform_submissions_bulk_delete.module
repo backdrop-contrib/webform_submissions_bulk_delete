@@ -35,20 +35,23 @@ function webform_submissions_bulk_delete_menu() {
  */
 function webform_submissions_bulk_delete_form($form, $form_state, $node) {
   if (!isset($form_state['delete_submit']['submit'])) {
+    $form['#attached']['css'] = array(
+      drupal_get_path('module', 'webform_submissions_bulk_delete') . '/css/webform_submissions_bulk_delete.css',
+    );
     $date_attributes = array(
       'placeholder' => format_date(REQUEST_TIME, 'custom', webform_date_format('short')),
     );
     $form['delete_start_date'] = array(
+      '#date_format' => 'Y-m-d',
       '#title'       => t('Start Date'),
-      '#type' => 'textfield',
-      '#attributes' => $date_attributes,
-      '#size'       => 20,
+      '#type' => 'date_popup',
+      '#date_year_range' => '-10:+10',
     );
     $form['delete_end_date'] = array(
+      '#date_format' => 'Y-m-d',
       '#title'       => t('End date'),
-      '#type' => 'textfield',
-      '#attributes' => $date_attributes,
-      '#size'       => 20,
+      '#type' => 'date_popup',
+      '#date_year_range' => '-10:+10',
     );
     $form['delete_submit'] = array(
       '#type' => 'submit',
@@ -78,6 +81,9 @@ function webform_submissions_bulk_delete_form_validate($form, &$form_state) {
     if ($end_date == '') {
       form_set_error('End Date validation', t('Please enter End Date'));
     }
+    if(strtotime($start_date) > strtotime($end_date)){
+     form_set_error('Date range validation','Start date should not greater than End date'); 
+   }
   }
 }
 /**
@@ -135,7 +141,7 @@ function webform_submissions_bulk_delete_webform_submission_batch($form, &$form_
  * Implementation of batch context().
  */
 function webform_submissions_bulk_delete_webform_submission_process($submission_id, &$context) {
-  webform_submissions_bulk_delete_webform_submission_action($submission_id, $context, 'content-id');
+  webform_submissions_bulk_delete_webform_submission_action($submission_id, $context);
 }
 /**
  * Implementation of batch success().
