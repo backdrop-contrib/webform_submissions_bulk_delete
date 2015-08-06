@@ -4,7 +4,7 @@ This module is used to delete the
 webform submissions with in the date range you given.
 
 This module will add a Menu tab(Bulk Delete) 
-under webform Results tab, with the help of 
+under the webform Results tab, with the help of 
 this user can select their date range they want.
 
 Requirements
