@@ -11,7 +11,7 @@ function webform_submissions_bulk_delete_permission() {
   return array(
     'access administration menu' => array(
       'title' => t('Access Webform Data Export'),
-      'description' => t('Access the Webform Data Export configuration admin pages'),
+      'description' => t('Access the Webform Data Export configuration admin pages.'),
     ),
   );
 }
@@ -22,7 +22,7 @@ function webform_submissions_bulk_delete_menu() {
   $items = array();
   $items['node/%webform_menu/webform-results/bulk-delete'] = array(
     'title' => 'Bulk Delete',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('webform_submissions_bulk_delete_form', 1),
     'access arguments' => array('access administration menu'),
     'weight' => 9,
@@ -35,9 +35,6 @@ function webform_submissions_bulk_delete_menu() {
  */
 function webform_submissions_bulk_delete_form($form, $form_state, $node) {
   if (!isset($form_state['delete_submit']['submit'])) {
-    $form['#attached']['css'] = array(
-      drupal_get_path('module', 'webform_submissions_bulk_delete') . '/css/webform_submissions_bulk_delete.css',
-    );
     $form['delete_start_date'] = array(
       '#date_format' => 'Y-m-d',
       '#title'       => t('Start Date'),
@@ -61,7 +58,7 @@ function webform_submissions_bulk_delete_form($form, $form_state, $node) {
   else {
     $path = current_path();
     $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
-    return confirm_form($form, t("Do you really want to make the submissions to delete?"), $path, t("Warning, this is the last step before form gets submitted"), t("Proceed?"));
+    return confirm_form($form, t("Do you really want to make the submissions to delete?"), $path, t("Warning, this is the last step before form gets submitted."), t("Proceed?"));
   }
   return $form;
 }
@@ -73,13 +70,13 @@ function webform_submissions_bulk_delete_form_validate($form, &$form_state) {
     $start_date = check_plain($form_state['values']['delete_start_date']);
     $end_date = check_plain($form_state['values']['delete_end_date']);
     if ($start_date == '') {
-      form_set_error('Start Date validation', t('Please enter Start Date'));
+      form_set_error('Start Date validation', t('Please enter Start Date.'));
     }
     if ($end_date == '') {
-      form_set_error('End Date validation', t('Please enter End Date'));
+      form_set_error('End Date validation', t('Please enter End Date.'));
     }
     if (strtotime($start_date) > strtotime($end_date)) {
-      form_set_error('Date range validation', t('Start date should not greater than End date'));
+      form_set_error('Date range validation', t('Start date should not greater than End date.'));
     }
   }
 }
@@ -146,7 +143,7 @@ function webform_submissions_bulk_delete_webform_submission_process($submission_
 function webform_submissions_bulk_delete_webform_submission_finished($success, $results, $operations) {
   if (isset($results['success'])) {
     if (count($results['success']) > 0) {
-      drupal_set_message(t('@count submissions has been deleted', array('@count' => count($results['success']))));
+      backdrop_set_message(t('@count submissions has been deleted', array('@count' => count($results['success']))));
     }
   }
 }

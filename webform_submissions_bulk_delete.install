@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Installation Success Message.
+ * Installation file.
  */
 
 /**
@@ -9,5 +9,5 @@
  */
 function webform_submissions_bulk_delete_install() {
   $t = get_t();
-  drupal_set_message(check_plain($t('Your Module has been successfully installed')));
+  backdrop_set_message($t('Your Module has been successfully installed'));
 }

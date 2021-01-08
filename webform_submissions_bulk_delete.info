@@ -1,6 +1,6 @@
 name = Webform Submissions Bulk Delete
-description = Delete webform submissions by date range 
+description = Delete webform submissions by date range
 package = Webform
-core = 7.x
+backdrop = 1.x
+type = module
 dependencies[] = webform
-dependencies[] = date_popup
